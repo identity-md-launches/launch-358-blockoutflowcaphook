@@ -1,0 +1,26 @@
+{
+  "kind": "univ4_hook",
+  "hook": {
+    "contract": "BlockOutflowCapHook",
+    "constructorArgs": [
+      "0xE03A1074c86CFeDd5C142C4F04F1a1536e203543"
+    ],
+    "permissions": [
+      "afterInitialize",
+      "afterSwap"
+    ]
+  },
+  "token": {
+    "contract": "Blockcap",
+    "name": "Blockcap",
+    "symbol": "BCAP",
+    "decimals": 18
+  },
+  "pool": {
+    "pairedCurrency": "0x0000000000000000000000000000000000000000",
+    "fee": 3000,
+    "tickSpacing": 60,
+    "initialPrice": "79299443975792720780679863727831"
+  },
+  "notes": "Describes src/BlockOutflowCapHook.sol and src/Blockcap.sol; ABI exports are docs/abi/BlockOutflowCapHook.json and docs/abi/Blockcap.json. The hook's sole constructor argument is the workflow-specified Sepolia PoolManager; the token has no constructor arguments. The pool pairs native ETH as currency0 with BCAP as currency1. initialPrice is decimal sqrtPriceX96 = TickMath.getSqrtPriceAtTick(138180), selected from the accepted local launch rehearsal because the workflow supplies no numeric opening price. That rehearsal seeds only BCAP below the opening price and executes a first buy from a pool holding no ETH, then a sell; its seed amounts are not allocation policy. afterInitialize starts an 86400-second window per PoolId. During that window, afterSwap counts positive currency1 output on zeroForOne buys, for both exact-input and exact-output swaps, against a constant 2500000 BCAP cap per pool per block. Exceeding the cap reverts the whole swap with BlockCapExceeded; a new block resets allowance. Sells neither consume nor restore allowance; liquidity removals and donations are not counted. At capEndsAt and later the cap is inactive. Pools have independent accounting; other attached pools use the same raw currency1-unit cap. Outflow reports counted buys; status reports activity, remaining allowance and expiry. All other permissions, including return deltas, are disabled; there are no hook fees or admin controls. Policy, signed artifact linkage, source publication, attestation, admission, deployment and frontend startup belong to later services. This technical manifest does not assert their completion or independent review."
+}
